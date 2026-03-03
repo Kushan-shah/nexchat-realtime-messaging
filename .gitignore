@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Frontend (separate repository)
+frontend/
+
+# Environment variables
+.env
+
+# Database
+prisma/dev.db
+prisma/dev.db-journal
+
+# Build output
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# K6 Load Testing (binaries)
+k6/
+k6-*/
+*.zip
+
+# Prisma migrations (dev-only)
+prisma/migrations/
+
+# Local dev tools
+*.bat
+local/
