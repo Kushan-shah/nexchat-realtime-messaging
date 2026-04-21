@@ -1,5 +1,9 @@
 # ---- Base Node ----
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
+
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
@@ -20,17 +24,16 @@ COPY src ./src
 # Add any build steps here if needed (e.g. JS compilation)
 
 # ---- Production ----
-FROM node:20-alpine AS production
-WORKDIR /app
+FROM base AS production
 ENV NODE_ENV=production
-RUN apk add --no-cache openssl
+
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
 COPY --from=build /app/src ./src
 COPY --from=build /app/prisma ./prisma
 
 # Add a non-root user for security
-RUN addgroup -g 1001 -S nodeuser && adduser -u 1001 -S nodeuser -G nodeuser
+RUN addgroup --system --gid 1001 nodeuser && adduser --system --uid 1001 --gid 1001 nodeuser
 USER nodeuser
 
 EXPOSE 3000
