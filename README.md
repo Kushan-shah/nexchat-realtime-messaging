@@ -2,6 +2,16 @@
 
 > Designed like a scaled-down Slack/WhatsApp backend — focused on reliability, consistency, and performance under real-world conditions.
 
+### 🌍 Live Application URLs
+* **Frontend UI**: [chat.kushan.codes](https://chat.kushan.codes) (Vercel)
+* **Backend API (Primary)**: [api.chat.kushan.codes](https://api.chat.kushan.codes) (AWS EC2)
+* **Backend API (Secondary)**: [nexchat-api.onrender.com](https://nexchat-api.onrender.com) (Render Web Service)
+* **API Documentation**: [api.chat.kushan.codes/swagger](https://api.chat.kushan.codes/swagger)
+
+### 📦 Source Code
+* **Frontend Repository**: [Kushan-shah/nexchat-ui](https://github.com/Kushan-shah/nexchat-ui)
+* **Backend Repository**: [Kushan-shah/nexchat-realtime-messaging](https://github.com/Kushan-shah/nexchat-realtime-messaging)
+
 ![Node.js](https://img.shields.io/badge/Node.js-20-green?style=flat-square&logo=node.js)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat-square&logo=postgresql)
 ![Redis](https://img.shields.io/badge/Redis-Lua%20Scripting-red?style=flat-square&logo=redis)
