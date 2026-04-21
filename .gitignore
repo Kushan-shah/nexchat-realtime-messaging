@@ -33,8 +33,6 @@ k6/
 k6-*/
 *.zip
 
-# Prisma migrations (dev-only)
-prisma/migrations/
 
 # Local dev tools
 *.bat
