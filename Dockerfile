@@ -23,6 +23,7 @@ COPY src ./src
 FROM node:20-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
+RUN apk add --no-cache openssl
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
 COPY --from=build /app/src ./src
