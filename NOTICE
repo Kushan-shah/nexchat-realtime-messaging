@@ -1,0 +1,13 @@
+NexChat — Production-Grade Real-Time Messaging System
+Copyright 2026 Kushan Shah
+
+This product includes software developed by Kushan Shah
+(https://github.com/Kushan-shah).
+
+Third-party dependencies used under their respective licenses:
+  - Express (MIT) — https://expressjs.com
+  - Socket.IO (MIT) — https://socket.io
+  - Prisma (Apache 2.0) — https://www.prisma.io
+  - Redis / ioredis (MIT) — https://github.com/redis/ioredis
+  - JSON Web Token (MIT) — https://github.com/auth0/node-jsonwebtoken
+  - Zod (MIT) — https://zod.dev
