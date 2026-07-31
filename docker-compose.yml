@@ -50,5 +50,24 @@ services:
       timeout: 5s
       retries: 5
 
+  rag-engine:
+    build:
+      context: ./services/rag-engine
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./services/rag-engine/.env
+    volumes:
+      - ./services/rag-engine:/app
+      - chroma_data:/app/chroma_data
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+
 volumes:
   pgdata:
+  chroma_data:
+

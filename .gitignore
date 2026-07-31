@@ -37,3 +37,13 @@ k6-*/
 # Local dev tools
 *.bat
 local/
+
+# Python & RAG Engine
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+chroma_data/
+services/rag-engine/.env
+

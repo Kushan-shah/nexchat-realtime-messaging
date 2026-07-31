@@ -3,6 +3,7 @@ const router = express.Router();
 const authRoutes = require('./authRoutes');
 const chatRoutes = require('./chatRoutes');
 const userRoutes = require('./userRoutes');
+const ragRoutes = require('./ragRoutes');
 const authMiddleware = require('../middleware/authMiddleware');
 const prisma = require('../models/prismaClient');
 const redisClient = require('../config/redis');
@@ -11,6 +12,7 @@ const redisClient = require('../config/redis');
 router.use('/auth', authRoutes);
 router.use('/chat', chatRoutes);
 router.use('/users', userRoutes);
+router.use('/rag', ragRoutes);
 
 /**
  * @swagger
