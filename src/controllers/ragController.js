@@ -1,4 +1,4 @@
-const ApiError = require('../utils/apiError');
+const ApiError = require('../utils/ApiError');
 const logger = require('../utils/logger');
 const redisClient = require('../config/redis');
 
