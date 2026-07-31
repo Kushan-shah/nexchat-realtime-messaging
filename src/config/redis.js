@@ -99,10 +99,21 @@ const mockRedisClient = {
 // ─── Real Redis Client ──────────────────────────────────────────────────────
 
 function createRealRedisClient() {
-  const client = createClient({ url: env.REDIS_URL });
+  const client = createClient({
+    url: env.REDIS_URL,
+    socket: {
+      reconnectStrategy: (retries) => {
+        if (retries > 5) {
+          logger.error('Redis reconnection max retries reached. Failing open or memory fallback.');
+          return new Error('Redis connection failed');
+        }
+        return Math.min(retries * 500, 2000);
+      }
+    }
+  });
 
   client.on('error', (err) => {
-    logger.error({ err }, 'Redis Client Error');
+    logger.error({ err: err.message }, 'Redis Client Error');
   });
 
   client.on('connect', () => {
