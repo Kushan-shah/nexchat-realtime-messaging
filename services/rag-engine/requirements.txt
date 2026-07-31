@@ -5,3 +5,7 @@ sentence-transformers
 pydantic
 python-multipart
 pypdf
+python-dotenv
+redis
+google-genai
+

@@ -49,9 +49,7 @@ exports.uploadDocument = async (req, res, next) => {
         headers: {
           ...formData.getHeaders(),
           'X-User-Id': userId
-        },
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
+        }
       });
 
       res.status(200).json({
@@ -60,14 +58,9 @@ exports.uploadDocument = async (req, res, next) => {
         details: response.data
       });
     } catch (err) {
-      if (err.response) {
-        const detail = err.response.data?.detail || err.response.data?.message || 'RAG engine failed to process document.';
-        logger.error({ status: err.response.status, detail }, 'RAG upload failed with response');
-        throw new ApiError(err.response.status, detail);
-      } else {
-        logger.error({ err: err.message }, 'RAG upload network failure');
-        throw new ApiError(503, 'RAG engine service is currently starting up or unavailable. Please try again in a few seconds.');
-      }
+      const errText = err.response?.data || err.message;
+      logger.error({ errText }, 'RAG upload failed');
+      throw new ApiError(503, 'RAG engine service is currently starting up or unavailable. Please try again in a few seconds.');
     }
   } catch (error) {
     next(error);
