@@ -44,10 +44,32 @@ except Exception as e:
 CHROMA_DATA_PATH = "./chroma_data"
 chroma_client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
 
-# -- Embedding Model --
-print("Loading MiniLM-L6-v2 embedding model...")
-embedder = SentenceTransformer('all-MiniLM-L6-v2')
-print("[OK] Embedding model ready.")
+# -- RAM-Optimized Embedding Pipeline --
+embedder = None
+
+def get_embeddings(texts: list) -> list:
+    """
+    Ultra-lightweight RAM-optimized embedding pipeline:
+    1. Primary: Gemini Embeddings API (text-embedding-004) -> 0 MB local RAM usage.
+    2. Fallback: Lazy-load MiniLM-L6-v2 only if GEMINI_API_KEY missing.
+    """
+    global embedder
+    if gemini_client:
+        try:
+            res = gemini_client.models.embed_content(
+                model="text-embedding-004",
+                contents=texts
+            )
+            return [e.values for e in res.embeddings]
+        except Exception as e:
+            print(f"[WARN] Gemini Embeddings API call failed: {e}")
+
+    if embedder is None:
+        print("[INFO] Lazy-loading MiniLM-L6-v2 embedding model...")
+        embedder = SentenceTransformer('all-MiniLM-L6-v2')
+        print("[OK] MiniLM-L6-v2 ready.")
+
+    return embedder.encode(texts).tolist()
 
 app = FastAPI(title="NexChat Enterprise RAG Engine v3")
 
@@ -205,7 +227,7 @@ async def upload_document(user_id: str = Header(..., alias="X-User-Id"),
     print(f"Indexing {len(documents)} chunks for user '{user_id}'...")
     collection.add(
         ids=chunk_ids,
-        embeddings=embedder.encode(documents).tolist(),
+        embeddings=get_embeddings(documents),
         documents=documents,
         metadatas=metadatas
     )
@@ -286,7 +308,7 @@ async def chat_query(request: ChatRequest):
 
     exact_keywords = re.findall(r'"([^"]*)"', query_str)
     clean_query = re.sub(r'"[^"]*"', '', query_str).strip() or query_str
-    query_vector = embedder.encode([clean_query]).tolist()
+    query_vector = get_embeddings([clean_query])
 
     results = None
     if exact_keywords:
