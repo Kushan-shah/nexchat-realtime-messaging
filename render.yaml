@@ -41,3 +41,25 @@ services:
         value: "5"
       - key: RATE_LIMIT_BURST
         value: "20"
+      - key: RAG_SERVICE_URL
+        fromService:
+          name: nexchat-rag
+          type: web
+          property: url
+
+  - type: web
+    name: nexchat-rag
+    plan: free
+    runtime: python
+    rootDir: services/rag-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          name: nexchat-redis
+          type: redis
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+
